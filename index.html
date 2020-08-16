@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Pizza Dough Calc</title>
+  <link rel="stylesheet" href="index.css">
+  <script>
+    let round = (value, decimals) => {
+      let num = Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+      if (isNaN(parseInt(num))) {
+        return '';
+      } else if (num < 0) {
+        return 0;
+      } else {
+        return num;
+      }
+    }
+    let doughCalc = (pizzas = false,divideFlour = false) => {
+      let flourPerPizza = 150;
+      let totalFlour = null;
+      let totalPizzas = null;
+      if (pizzas === false && divideFlour === false) {
+        document.getElementById("flourPerPizza").value = '150';
+        totalFlour = parseFloat(document.getElementById("totalFlour").value);
+        totalPizzas = round(totalFlour / 150,1);
+        document.getElementById("totalPizzas").value = totalPizzas;
+      } else if (pizzas === false && divideFlour === true) {
+        flourPerPizza = parseFloat(document.getElementById("flourPerPizza").value);
+        totalFlour = parseFloat(document.getElementById("totalFlour").value);
+        totalPizzas = round(totalFlour / flourPerPizza, 1);
+        document.getElementById("totalPizzas").value = totalPizzas;
+      } else if (pizzas === true && divideFlour === false) {
+        totalPizzas = parseFloat(document.getElementById("totalPizzas").value);
+        totalFlour = parseFloat(document.getElementById("totalFlour").value);
+        flourPerPizza = round(totalFlour / totalPizzas, 0);
+        document.getElementById("flourPerPizza").value = flourPerPizza;
+      } else {
+        flourPerPizza = parseFloat(document.getElementById("flourPerPizza").value);
+        totalPizzas = parseFloat(document.getElementById("totalPizzas").value);
+        totalFlour = round(flourPerPizza * totalPizzas, 0);
+        document.getElementById("totalFlour").value = totalFlour;
+      }
+      let levain = totalFlour / 2;
+      let starter = levain / 5;
+      let levainWater = levain / 2.5;
+      let levainFlour = levain / 2.5;
+      let flour = totalFlour - (levain / 2);
+      let salt = 0.028 * totalFlour;
+      let hydration = parseFloat(document.getElementById("hydration").value) / 100;
+      let water = (totalFlour * hydration) - (levain / 2);
+      document.getElementById("starter").innerHTML = round(starter,0);
+      document.getElementById("levain").innerHTML = round(levain,0);
+      document.getElementById("levainWater").innerHTML = round(levainWater,0);
+      document.getElementById("levainFlour").innerHTML = round(levainFlour,0);
+      document.getElementById("flour").innerHTML = round(flour,0);
+      document.getElementById("salt").innerHTML = round(salt,0);
+      document.getElementById("water").innerHTML = round(water,0);
+      return;
+    }
+  </script>
+</head>
+<body onload="doughCalc(false,true)">
+  <h1>Pizza Dough Calc</h1>
+  <fieldset>
+    <legend>Pizza</legend>
+    <section class="grid">
+      <div class="field">
+        Pizzas
+      </div>
+      <div class="value">
+        <input type="text" value="" name="totalFlour" id="totalPizzas" onkeyup="doughCalc(true,true)">
+      </div>
+      <div class="field">
+        Flour per pizza (g)
+      </div>
+      <div class="value">
+        <input type="text" value="150" name="totalFlour" id="flourPerPizza" onkeyup="doughCalc(false, true)">
+      </div>
+      <div class="field">
+        Total Flour (g)
+      </div>
+      <div class="value">
+        <input type="text" value="600" name="totalFlour" id="totalFlour" onkeyup="doughCalc(false,false)">
+      </div>
+    </section>
+  </fieldset><br>
+  <fieldset>
+    <legend>Levain</legend> <!-- Starter is total Levain weight divided by 5 -->
+    <section class="grid">
+      <div class="field">
+        Starter (g)
+      </div>
+      <div class="value">
+        <label id="starter"></label>
+      </div><!-- Water and Flour are each total Levain weight divided by 2.5 -->
+      <div class="field">
+        Water (g)
+      </div>
+      <div class="value">
+        <label id="levainWater"></label>
+      </div>
+      <div class="field">
+        Flour (g)
+      </div>
+      <div class="value">
+        <label id="levainFlour"></label>
+      </div>
+    </section>
+  </fieldset><br>
+  <form>
+    <fieldset>
+      <legend>Dough</legend>
+      <section class="grid">
+        <div class="field">
+          Hydration (%)
+        </div>
+        <div class="value">
+          <input type="text" value="70" name="hydration" id="hydration" onkeyup="doughCalc(true,true)">
+        </div><!-- Water is total flour*hydration minus half levain weight -->
+        <div class="field">
+          Water (g)
+        </div>
+        <div class="value">
+          <label id="water"></label>
+        </div><!-- Salt is 0.028 times total flour weight -->
+        <div class="field">
+          Salt (g)
+        </div>
+        <div class="value">
+          <label id="salt"></label>
+        </div><!-- Levain is half flour weight -->
+        <div class="field">
+          Levain (g)
+        </div>
+        <div class="value">
+          <label id="levain"></label>
+        </div><!-- Flour is total flour weight minus half levain weight -->
+        <div class="field">
+          Flour (g)
+        </div>
+        <div class="value">
+          <label id="flour"></label>
+        </div>
+      </section>
+    </fieldset>
+  </form>
+</body>
+</html>
